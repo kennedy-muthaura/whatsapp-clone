@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsappclone/constants.dart';
 import 'package:whatsappclone/pages/homepage.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());

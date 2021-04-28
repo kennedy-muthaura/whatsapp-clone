@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:whatsappclone/models/contacts.dart';
 
 class ProfilePicPage extends StatelessWidget {
-  final ContactModel contact;
+  final String profilePicUrl;
+  final String name;
 
-  ProfilePicPage(this.contact);
+  ProfilePicPage({required this.profilePicUrl, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ProfilePicPage extends StatelessWidget {
           color: Colors.white,
         ),
         title: Text(
-          contact.name,
+          name,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -26,7 +27,7 @@ class ProfilePicPage extends StatelessWidget {
             widthFactor: 0.7,
             heightFactor: 0.95,
             child: Image.network(
-              contact.profilePicUrl,
+              profilePicUrl,
               fit: BoxFit.cover,
             ),
           ),
