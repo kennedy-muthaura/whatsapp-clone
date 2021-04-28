@@ -4,7 +4,7 @@ import 'package:faker/faker.dart';
 var faker = new Faker();
 
 List<ContactModel> fakeContacts = List.generate(
-    60,
+    20,
     (index) => ContactModel(
         name: faker.person.name(),
         phoneNumber: faker.phoneNumber.us(),

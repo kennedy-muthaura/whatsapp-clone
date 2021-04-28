@@ -21,6 +21,7 @@ class _ContactsPageState extends State<ContactsPage> {
           slivers: <Widget>[
             SliverAppBar(
               elevation: _showSearchBar ? 10 : 10,
+              pinned: true,
               leading: BackButton(
                 color: _showSearchBar ? null : Colors.black,
               ),

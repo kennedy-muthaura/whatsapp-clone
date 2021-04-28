@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,9 @@ import 'package:whatsappclone/models/contacts.dart';
 import 'package:whatsappclone/pages/contact_detail_page.dart';
 import 'package:whatsappclone/pages/contacts_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:whatsappclone/pages/profile_pic_page.dart';
+
+import 'widgets/status_page_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,52 +19,222 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> _bodyWidgets = [
-    Text('camera page').sliverBox,
-    SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        ContactModel contact = fakeContacts[index];
-        return MaterialButton(
-          splashColor: Colors.grey,
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ContactDetailPage(
-                      contact: contact,
-                    )));
-          },
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(contact.profilePicUrl),
-            ),
-            title: Text(
-              contact.name,
-              style: TextStyle(fontWeight: FontWeight.w900),
-            ),
-            trailing: Text(contact.userStatus.last.timeAdded.split(" ")[0]),
-            subtitle: Row(
-              children: [
-                Icon(
-                  Icons.check,
-                  color: Colors.blue,
-                ),
-                Text(
-                  contact.messages.last.text,
-                ),
-              ],
-            ),
-          ),
-        );
-      }, childCount: fakeContacts.length - 15),
-    ),
-    Text('status page').sliverBox,
-    Text('calls page').sliverBox,
-  ];
-
   int _selectedBody = 1;
   bool _showSearchBar = true;
 
+  void scrollToNextPage() {
+    if (_selectedBody > 0) {
+      setState(() {
+        _selectedBody--;
+      });
+    }
+  }
+
+  void scrollToPreviosPage() {
+    if (_selectedBody < 4) {
+      setState(() {
+        _selectedBody++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> _bodyWidgets = [
+      Text('camera page').sliverBox,
+      SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          ContactModel contact = fakeContacts[index];
+          bool _receivedBool = Random().nextBool();
+
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Center(
+                              child: Container(
+                                width: 250,
+                                margin: EdgeInsets.only(top: 90),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onDoubleTap: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePicPage(contact)));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            width: 300,
+                                            child: Image.network(
+                                              contact.profilePicUrl,
+                                              fit: BoxFit.cover,
+                                              width: 250,
+                                            ),
+                                          ),
+                                          Positioned(
+                                              top: 0,
+                                              left: 5,
+                                              child: Text(
+                                                contact.name,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 300,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                      color: Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ContactDetailPage(
+                                                    contact: contact,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Icon(
+                                              Icons.message,
+                                              color: kTealDarkGreen,
+                                              size: 25,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.phone,
+                                            color: kTealDarkGreen,
+                                            size: 25,
+                                          ),
+                                          Icon(
+                                            Icons.live_tv,
+                                            color: kTealDarkGreen,
+                                            size: 25,
+                                          ),
+                                          Icon(
+                                            Icons.notification_important,
+                                            color: kTealDarkGreen,
+                                            size: 25,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(contact.profilePicUrl),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Material(
+                        child: InkWell(
+                          splashColor: Colors.grey,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ContactDetailPage(
+                                  contact: contact,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                contact.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontWeight: FontWeight.w900),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    child: Stack(
+                                      children: [
+                                        Icon(
+                                          Icons.check,
+                                          color: _receivedBool
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                          size: 15,
+                                        ),
+                                        Positioned(
+                                          left: 5,
+                                          top: 0,
+                                          child: Icon(
+                                            Icons.check,
+                                            color: _receivedBool
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                            size: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      contact.messages.last.text,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(contact.userStatus.last.timeAdded.split(" ")[0])
+                  ],
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Divider(
+                  indent: 40,
+                )
+              ],
+            ),
+          );
+        }, childCount: fakeContacts.length - 15),
+      ),
+      StatusPageWidget(
+        moveNextPage: scrollToNextPage,
+        movePreviosPage: scrollToPreviosPage,
+      ),
+      Text('calls page').sliverBox,
+    ];
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -68,6 +243,8 @@ class _HomePageState extends State<HomePage> {
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: _showSearchBar ? null : Colors.white,
+                pinned: true,
+                floating: true,
                 title: Row(
                   children: [
                     Text(
