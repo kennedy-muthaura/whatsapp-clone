@@ -40,6 +40,63 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _fabs = [
+      SizedBox.shrink(),
+      FloatingActionButton(
+        backgroundColor: kLightGreen,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ContactsPage(),
+          ));
+        },
+        child: Icon(
+          Icons.message,
+          color: Colors.white,
+        ),
+      ),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: 40,
+            child: FloatingActionButton(
+              backgroundColor: Colors.grey.shade200,
+              onPressed: () {},
+              child: Icon(
+                Icons.edit,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 40,
+            child: FloatingActionButton(
+              backgroundColor: kLightGreen,
+              onPressed: () {},
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      FloatingActionButton(
+        backgroundColor: kLightGreen,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ContactsPage(),
+          ));
+        },
+        child: Icon(
+          Icons.add_call,
+          color: Colors.white,
+        ),
+      ),
+    ];
     List<Widget> _bodyWidgets = [
       Text('camera page').sliverBox,
       SliverList(
@@ -470,18 +527,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: kLightGreen,
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ContactsPage(),
-            ));
-          },
-          child: Icon(
-            Icons.message,
-            color: Colors.white,
-          ),
-        ),
+        floatingActionButton: _fabs[_selectedBody],
       ),
     );
   }
